@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Ejs Demo</title>
+  </head>
+  <body>
+    <%- include ejs_partials/about.ejs %>
+
+    <hr>
+    <div id="root"></div>
+    <hr>
+
+    <%- include ejs_partials/footer.ejs %>
+    
+    <script>
+      console.log("htmlWebpackPlugin options");
+      console.log(JSON.parse('<%- JSON.stringify(htmlWebpackPlugin) %>'));
+    </script>
+
+    <ul>
+      <%-
+          htmlWebpackPlugin.options.bundles.map(
+              function(bundleHtmlPath) {
+                  return "<li><a href='" + bundleHtmlPath + "'>" + bundleHtmlPath.replace("/", "").replace(".html", "") + "</a></li>";
+              })
+          .join("\n") 
+      %>
+    </ul>
+  </body>
+</html>
