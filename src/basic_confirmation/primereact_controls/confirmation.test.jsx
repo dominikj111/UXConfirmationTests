@@ -1,10 +1,12 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import { configure } from "@testing-library/dom";
 
 import Button from "./Button";
 import Dropdown from "./Dropdown";
 import MultiSelect from "./Multiselect";
 import Checkbox from "./Checkbox";
+import Chip from "./Chip";
 
 describe("These tests test user events upon Primereact controls", () => {
   it("Renders text after click on a Button", () => {
@@ -55,4 +57,19 @@ describe("These tests test user events upon Primereact controls", () => {
   it("The Checkbox is selectable by it's role", () => {
     expect(screen.queryAllByRole("checkbox").length).toBe(2);
   });
+
+  it("Locates the 'remove' icon of the Chip element", () => {
+    render(<Chip />);
+    configure({ testIdAttribute: "data-pc-section" });
+    
+    expect(screen.queryByText("Chip Removed")).toBeNull();
+    expect(screen.queryByTestId("removeicon")).not.toBeNull();
+    
+    fireEvent.click(screen.queryByTestId("removeicon"));
+    
+    expect(screen.queryByText("Chip Removed")).not.toBeNull();
+    expect(screen.queryByTestId("removeicon")).toBeNull();
+    
+    configure({ testIdAttribute: "data-testid" });
+  })
 });
