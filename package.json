@@ -4,6 +4,7 @@
   "scripts": {
     "serve": "rm -rf ./dist/* && NODE_ENV=development ./node_modules/.bin/webpack serve --config webpack.dev.js --color",
     "build": "rm -rf ./dist/* && NODE_ENV=production ./node_modules/.bin/webpack --config webpack.prod.js --color",
+    "clean": "rm -rf ./dist/*",
     "test": "jest"
   },
   "devDependencies": {
