@@ -55,6 +55,7 @@ describe("These tests test user events upon Primereact controls", () => {
   });
 
   it("The Checkbox is selectable by it's role", () => {
+    render(<Checkbox />);
     expect(screen.queryAllByRole("checkbox").length).toBe(2);
   });
 
