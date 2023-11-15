@@ -12,6 +12,11 @@ describe("These tests test user events upon Primereact controls", () => {
     fireEvent.click(screen.queryByText("Button"));
     expect(screen.queryByText("Button Text")).not.toBeNull();
   });
+  
+  it("Allows to select button by it's role", () => {
+    render(<Button />);
+    expect(screen.queryAllByRole("button").length).toBe(1);
+  });
 
   it("Renders Dropdown panel after click on a placeholder", () => {
     render(<Dropdown />);
@@ -31,7 +36,7 @@ describe("These tests test user events upon Primereact controls", () => {
     render(<MultiSelect onChange={onChangeHandler} />);
 
     const selectElement = screen.queryByText("Select ...");
-    
+
     fireEvent.click(selectElement);
 
     expect(screen.queryByText("Maybe")).not.toBeNull();
