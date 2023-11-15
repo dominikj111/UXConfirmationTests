@@ -4,6 +4,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import Button from "./Button";
 import Dropdown from "./Dropdown";
 import MultiSelect from "./Multiselect";
+import Checkbox from "./Checkbox";
 
 describe("These tests test user events upon Primereact controls", () => {
   it("Renders text after click on a Button", () => {
@@ -12,7 +13,7 @@ describe("These tests test user events upon Primereact controls", () => {
     fireEvent.click(screen.queryByText("Button"));
     expect(screen.queryByText("Button Text")).not.toBeNull();
   });
-  
+
   it("Allows to select button by it's role", () => {
     render(<Button />);
     expect(screen.queryAllByRole("button").length).toBe(1);
@@ -49,5 +50,9 @@ describe("These tests test user events upon Primereact controls", () => {
 
     expect(onChangeHandler).toHaveBeenCalledTimes(2);
     expect(onChangeHandler).toHaveBeenCalledWith([1, 3]);
+  });
+
+  it("The Checkbox is selectable by it's role", () => {
+    expect(screen.queryAllByRole("checkbox").length).toBe(2);
   });
 });

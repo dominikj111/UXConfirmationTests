@@ -8,6 +8,7 @@ import StylesImport from "./styles_import";
 import PRButton from "./primereact_controls/Button";
 import PRDropdown from "./primereact_controls/Dropdown";
 import PRMultiSelect from "./primereact_controls/Multiselect";
+import PRCheckbox from "./primereact_controls/Checkbox";
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
@@ -18,5 +19,6 @@ root.render(
     <PRButton />
     <PRDropdown />
     <PRMultiSelect onChange={(value) => console.log(value)} />
+    <PRCheckbox />
   </StrictMode>
 );
