@@ -9,6 +9,7 @@ import PRButton from "./primereact_controls/Button";
 import PRDropdown from "./primereact_controls/Dropdown";
 import PRMultiSelect from "./primereact_controls/Multiselect";
 import PRCheckbox from "./primereact_controls/Checkbox";
+import PRMultiselectWithGroups from "./primereact_controls/MultiselectWithGroups";
 import PRChip from "./primereact_controls/Chip";
 
 const rootElement = document.getElementById("root");
@@ -21,6 +22,7 @@ root.render(
     <PRDropdown />
     <PRMultiSelect onChange={(value) => console.log(value)} />
     <PRCheckbox />
+    <PRMultiselectWithGroups onChange={(value) => console.log(value)} />
     <PRChip />
   </StrictMode>
 );
