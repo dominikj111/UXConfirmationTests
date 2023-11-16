@@ -39,6 +39,7 @@ export default function ({ onChange }) {
         optionGroupChildren="items"
         optionLabel="label"
         optionGroupLabel="label"
+        maxSelectedLabels={0}
       />
     </div>
   );

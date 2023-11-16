@@ -11,11 +11,12 @@ export default function () {
 
   return (
     <div>
+      <p>Some other element</p>
       <Dropdown
         value={value}
         options={options}
         onChange={(e) => setValue(e.value)}
-        placeholder="Select ..."
+        placeholder="Select one ..."
       />
     </div>
   );

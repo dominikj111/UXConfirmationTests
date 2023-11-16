@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitForElementToBeRemoved } from "@testing-library/react";
 import { configure } from "@testing-library/dom";
 
 import Button from "./Button";
@@ -8,7 +8,7 @@ import MultiSelect from "./Multiselect";
 import Checkbox from "./Checkbox";
 import Chip from "./Chip";
 import MultiselectWithGroups from "./MultiselectWithGroups";
-import { experiments } from "webpack";
+import { debug } from "webpack";
 
 describe("These tests test user events upon Primereact controls", () => {
   it("Renders text after click on a Button", () => {
@@ -26,7 +26,7 @@ describe("These tests test user events upon Primereact controls", () => {
   it("Renders Dropdown panel after click on a placeholder", () => {
     render(<Dropdown />);
 
-    const selectElements = screen.queryAllByText("Select ...");
+    const selectElements = screen.queryAllByText("Select one ...");
     expect(selectElements.length).toBe(2);
 
     // fireEvent.click(selectElements[0]); // click on any works just fine
@@ -81,11 +81,44 @@ describe("These tests test user events upon Primereact controls", () => {
     render(<MultiselectWithGroups onChange={onChangeHandler} />);
 
     fireEvent.click(screen.getByText("Select from group ...")); // click to open the dropdownpanel
-    
+
     configure({ testIdAttribute: "data-pc-section" });
     fireEvent.click(screen.queryByTestId("hiddeninput")); // click on "Select All" checkbox
     configure({ testIdAttribute: "data-testid" });
 
     expect(onChangeHandler).toHaveBeenCalledWith([1, 2, 3, 11, 22, 33]);
+  });
+
+  it("Allows to open and close the dropdown panel of the multiselect with groups", async () => {
+    const onChangeHandler = jest.fn();
+    render(<MultiselectWithGroups onChange={onChangeHandler} />);
+
+    expect(screen.queryByText("Yes")).toBeNull();
+    fireEvent.click(screen.getByText("Select from group ...")); // click to open the dropdownpanel
+    expect(screen.queryByText("Yes")).not.toBeNull();
+
+    fireEvent.click(screen.getByText("No")); // select an option
+
+    fireEvent.click(screen.getByText("1 items selected")); // click to close the dropdownpanel
+
+    await waitForElementToBeRemoved(() => screen.queryByText("Yes"));
+
+    expect(screen.queryByText("Yes")).toBeNull();
+    expect(screen.queryByText("No")).toBeNull();
+  });
+
+  it("Allows to open and close the dropdown panel of the dropdown", async () => {
+    render(<Dropdown />);
+    const dropdownElement = screen.getAllByText("Select one ...")[1];
+    const someParagraphElement = screen.getByText("Some other element");
+
+    expect(screen.queryByText("Yes")).toBeNull();
+    fireEvent.click(dropdownElement); // click to open the dropdownpanel
+    expect(screen.queryByText("Yes")).not.toBeNull();
+
+    fireEvent.click(dropdownElement); // click to close the dropdownpanel
+
+    await waitForElementToBeRemoved(() => screen.queryByText("Yes"));
+    expect(screen.queryByText("Yes")).toBeNull();
   });
 });
