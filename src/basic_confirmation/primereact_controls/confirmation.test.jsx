@@ -1,6 +1,5 @@
 import React from "react";
 import { render, screen, fireEvent, waitForElementToBeRemoved } from "@testing-library/react";
-import { configure } from "@testing-library/dom";
 
 import Button from "./Button";
 import Dropdown from "./Dropdown";
@@ -63,17 +62,16 @@ describe("These tests test user events upon Primereact controls", () => {
 
   it("Locates the 'remove' icon of the Chip element", () => {
     render(<Chip />);
-    configure({ testIdAttribute: "data-pc-section" });
+
+    const chipLabelElement = screen.queryByText("Chip Label");
 
     expect(screen.queryByText("Chip Removed")).toBeNull();
-    expect(screen.queryByTestId("removeicon")).not.toBeNull();
-
-    fireEvent.click(screen.queryByTestId("removeicon"));
+    expect(chipLabelElement).not.toBeNull();
+    
+    fireEvent.click(chipLabelElement.parentElement.querySelector("svg"));
 
     expect(screen.queryByText("Chip Removed")).not.toBeNull();
-    expect(screen.queryByTestId("removeicon")).toBeNull();
-
-    configure({ testIdAttribute: "data-testid" });
+    expect(screen.queryByText("Chip Label")).toBeNull();
   });
 
   it("Allows to select all options in multiselect with groups by the checkbox", () => {
@@ -82,9 +80,13 @@ describe("These tests test user events upon Primereact controls", () => {
 
     fireEvent.click(screen.getByText("Select from group ...")); // click to open the dropdownpanel
 
-    configure({ testIdAttribute: "data-pc-section" });
-    fireEvent.click(screen.queryByTestId("hiddeninput")); // click on "Select All" checkbox
-    configure({ testIdAttribute: "data-testid" });
+    fireEvent.click(screen.queryByText("Group 1").parentElement.parentElement.parentElement.querySelector("[role='checkbox']")); // click on "Select All" checkbox
+    // fireEvent.click(screen.queryByRole("checkbox")); // click on "Select All" checkbox
+
+    // import { configure } from "@testing-library/dom";
+    // configure({ testIdAttribute: "data-pc-section" });
+    // fireEvent.click(screen.queryByTestId("hiddeninput")); // click on "Select All" checkbox
+    // configure({ testIdAttribute: "data-testid" });
 
     expect(onChangeHandler).toHaveBeenCalledWith([1, 2, 3, 11, 22, 33]);
   });
@@ -105,12 +107,16 @@ describe("These tests test user events upon Primereact controls", () => {
 
     expect(screen.queryByText("Yes")).toBeNull();
     expect(screen.queryByText("No")).toBeNull();
+
+    // deselect an option
+    fireEvent.click(screen.getByText("1 items selected"));
+    fireEvent.click(screen.getByText("No"));
+    expect(onChangeHandler).toHaveBeenCalledWith([]);
   });
 
   it("Allows to open and close the dropdown panel of the dropdown", async () => {
     render(<Dropdown />);
     const dropdownElement = screen.getAllByText("Select one ...")[1];
-    const someParagraphElement = screen.getByText("Some other element");
 
     expect(screen.queryByText("Yes")).toBeNull();
     fireEvent.click(dropdownElement); // click to open the dropdownpanel
